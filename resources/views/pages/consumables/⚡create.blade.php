@@ -57,7 +57,7 @@ new class extends \Livewire\Component
 
         <flux:card>
             <div class="flex justify-end gap-3">
-                <a href="{{ route('dashboard') }}">
+                <a href="{{ route('consumables.index') }}">
                     <flux:button variant="outline">{{ __('actions.cancel') }}</flux:button>
                 </a>
                 <flux:button type="submit" variant="primary">{{ __('consumables.create_consumable') }}</flux:button>

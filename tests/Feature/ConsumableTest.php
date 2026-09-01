@@ -8,11 +8,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 describe('Consumables', function () {
-    test('index screen displays all consumables the user joined', function () {
+    test('index screen displays all consumables', function () {
         $user = User::factory()->create();
 
         $consumable = Consumable::factory()->create();
-        $user->consumables()->attach($consumable, ['total_quantity' => 0]);
 
         $response = $this->actingAs($user)->get(route('consumables.index'));
 
@@ -41,20 +40,19 @@ describe('Consumables', function () {
     test('a consumable can be created and user is automatically joined', function () {
         $user = User::factory()->create();
 
-        $response = $this->post(route('consumables.create', [
-            'name' => 'Milk',
-            'unit' => 'liters',
-        ]));
-
-        $response->assertRedirect(route('consumables.show', Consumable::first()));
+        $this->actingAs($user)
+            ->post(route('consumables.create'), [
+                'name' => 'Milk',
+                'unit' => 'liters',
+            ])
+            ->assertSessionHas('success', __('consumables.joined_successfully'))
+            ->assertRedirect();
 
         $this->assertDatabaseHas('consumables', ['name' => 'Milk', 'unit' => 'liters']);
         $this->assertDatabaseHas('consumable_user', [
             'user_id' => $user->id,
             'total_quantity' => 0,
         ]);
-
-        $this->assertSessionHas('success', __('consumables.joined_successfully'));
     });
 
     test('a consumable name is required when creating', function () {
@@ -90,13 +88,13 @@ describe('Consumables', function () {
         $response->assertSee('Coffee');
     });
 
-    test('a user not joined cannot view a consumable', function () {
+    test('an unjoined user can view a consumable', function () {
         $user = User::factory()->create();
         $consumable = Consumable::factory()->create();
 
         $response = $this->actingAs($user)->get(route('consumables.show', $consumable));
 
-        $response->assertForbidden();
+        $response->assertOk();
     });
 
     test('a user can join a consumable', function () {

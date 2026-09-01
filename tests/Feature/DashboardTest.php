@@ -7,10 +7,10 @@ test('guests are redirected to the login page', function () {
     $response->assertRedirect(route('login'));
 });
 
-test('authenticated users are redirected to consumables', function () {
+test('authenticated users can view the dashboard', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
-    $response->assertRedirect(route('consumables.index'));
+    $response->assertOk();
 });

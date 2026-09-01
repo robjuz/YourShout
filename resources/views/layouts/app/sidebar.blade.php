@@ -18,6 +18,9 @@
 
                     <flux:sidebar.item icon="cube" :href="route('consumables.index')" :current="request()->routeIs('consumables.*')" wire:navigate>
                         {{ __('consumables.consumables') }}
+                        @if (auth()->user()->consumables()->count() > 0)
+                            <flux:badge variant="secondary" slot="trailing">{{ auth()->user()->consumables()->count() }}</flux:badge>
+                        @endif
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="plus" :href="route('consumables.create')" :current="request()->routeIs('consumables.create')" variant="primary" wire:navigate>

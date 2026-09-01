@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Consumable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -10,14 +9,18 @@ new class extends \Livewire\Component
     #[Computed]
     public function consumables()
     {
-        return auth()->user()
-            ->consumables()
-            ->with(['users' => function (BelongsToMany $query) {
-                $query->withPivot('total_quantity')
-                    ->orderByPivot('total_quantity', 'asc');
-            }])
+        return Consumable::with(['users' => function ($query) {
+            $query->withPivot('total_quantity')
+                ->orderByPivot('total_quantity', 'asc');
+        }])
             ->orderByDesc('updated_at')
             ->get();
+    }
+
+    #[Computed]
+    public function joinedIds()
+    {
+        return auth()->user()->consumables()->pluck('consumables.id')->toArray();
     }
 
     public function leave(Consumable $consumable)
@@ -33,7 +36,7 @@ new class extends \Livewire\Component
     @if ($this->consumables->isEmpty())
         <div class="text-center py-12">
             <p class="text-gray-500">{{ __('consumables.no_consumables') }}</p>
-            <p class="text-sm text-gray-400 mt-1">{{ __('consumables.no_consumables_create') }}</p>
+            <p class="text-sm text-gray-400 mt-1">{{ __('consumables.create_first') }}</p>
         </div>
     @else
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -61,14 +64,21 @@ new class extends \Livewire\Component
                     @endif
 
                     <div class="flex gap-2 pt-2">
-                        <a href="{{ route('consumables.show', $consumable) }}" class="flex-1">
-                            <flux:button variant="primary" class="w-full">{{ __('consumables.participation') }}</flux:button>
-                        </a>
-                        <form method="POST" action="{{ route('consumables.leave', $consumable) }}">
-                            @csrf
-                            @method('DELETE')
-                            <flux:button variant="outline">{{ __('consumables.leave') }}</flux:button>
-                        </form>
+                        @if (in_array($consumable->id, $this->joinedIds))
+                            <a href="{{ route('consumables.show', $consumable) }}" class="flex-1">
+                                <flux:button variant="primary" class="w-full">{{ __('consumables.participation') }}</flux:button>
+                            </a>
+                            <form method="POST" action="{{ route('consumables.leave', $consumable) }}">
+                                @csrf
+                                @method('DELETE')
+                                <flux:button variant="outline">{{ __('consumables.leave') }}</flux:button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('consumables.join', $consumable) }}" class="w-full">
+                                @csrf
+                                <flux:button variant="primary" class="w-full">{{ __('consumables.join') }}</flux:button>
+                            </form>
+                        @endif
                     </div>
                 </flux:card>
             @endforeach
