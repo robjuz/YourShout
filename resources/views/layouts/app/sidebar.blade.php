@@ -19,6 +19,10 @@
                     <flux:sidebar.item icon="cube" :href="route('consumables.index')" :current="request()->routeIs('consumables.*')" wire:navigate>
                         {{ __('consumables.consumables') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="plus" :href="route('consumables.create')" :current="request()->routeIs('consumables.create')" variant="primary" wire:navigate>
+                        {{ __('consumables.create_consumable') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

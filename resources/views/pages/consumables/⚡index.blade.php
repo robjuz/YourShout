@@ -33,9 +33,7 @@ new class extends \Livewire\Component
     @if ($this->consumables->isEmpty())
         <div class="text-center py-12">
             <p class="text-gray-500">{{ __('consumables.no_consumables') }}</p>
-            <a href="{{ route('consumables.create') }}" class="mt-4 inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700">
-                {{ __('consumables.create_consumable') }}
-            </a>
+            <p class="text-sm text-gray-400 mt-1">{{ __('consumables.no_consumables_create') }}</p>
         </div>
     @else
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
