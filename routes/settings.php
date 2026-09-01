@@ -6,6 +6,17 @@ Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::livewire('settings/profile', 'pages::settings.profile')->name('profile.edit');
+
+    Route::post('locale', function () {
+        $locale = request('locale');
+
+        if (in_array($locale, config('app.locales', ['en']))) {
+            session(['locale' => $locale]);
+            app()->setLocale($locale);
+        }
+
+        return redirect()->back();
+    })->name('locale.switch');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

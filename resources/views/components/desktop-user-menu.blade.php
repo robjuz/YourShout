@@ -22,10 +22,24 @@
             <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
                 {{ __('Settings') }}
             </flux:menu.item>
+
+            <flux:menu.separator />
+
+            @foreach (config('app.locales', ['en' => 'English', 'de' => 'Deutsch']) as $locale => $name)
+                <form method="POST" action="{{ route('locale.switch') }}">
+                    @csrf
+                    <input type="hidden" name="locale" value="{{ $locale }}">
+                    <flux:menu.radio type="submit" class="cursor-pointer" :value="$locale">
+                        {{ $name }}
+                    </flux:menu.radio>
+                </form>
+            @endforeach
+
+            <flux:menu.separator />
+
             <form method="POST" action="{{ route('logout') }}" class="w-full">
                 @csrf
                 <flux:menu.item
-                    as="button"
                     type="submit"
                     icon="arrow-right-start-on-rectangle"
                     class="w-full cursor-pointer"
