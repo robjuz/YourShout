@@ -46,7 +46,7 @@ new class extends \Livewire\Component
 };
 ?>
 
-<form wire:submit="record" class="flex items-center gap-2">
+<form wire:submit="record" class="flex items-end gap-2">
     <flux:input
         wire:model="quantity"
         type="number"

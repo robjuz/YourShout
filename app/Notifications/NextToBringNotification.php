@@ -23,9 +23,9 @@ class NextToBringNotification extends Notification implements ShouldQueue
     {
         $channels = ['mail'];
 
-        if ($notifiable->pushSubscriptions()->count() > 0) {
-            $channels[] = 'webpush';
-        }
+//        if ($notifiable->pushSubscriptions()->count() > 0) {
+//            $channels[] = 'webpush';
+//        }
 
         return $channels;
     }

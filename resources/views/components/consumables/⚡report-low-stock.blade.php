@@ -25,6 +25,6 @@ new class extends \Livewire\Component
 };
 ?>
 
-<flux:button variant="warning" wire:click="report" icon="exclamation-triangle">
+<flux:button variant="danger" wire:click="report" icon="exclamation-triangle">
     {{ __('consumables.report_low_stock') }}
 </flux:button>

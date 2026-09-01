@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Consumable;
 use App\Models\PurchaseRecord;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +20,8 @@ class PurchaseRecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'consumable_id' => App\Models\Consumable::factory(),
-            'user_id' => App\Models\User::factory(),
+            'consumable_id' => Consumable::factory(),
+            'user_id' => User::factory(),
             'quantity' => $this->faker->numberBetween(1, 6),
         ];
     }
