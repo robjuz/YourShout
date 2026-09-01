@@ -43,14 +43,12 @@ new class extends \Livewire\Component
                     wire:model="name"
                     label="{{ __('consumables.consumable_name') }}"
                     placeholder="e.g., Milk, Coffee, Toilet Paper"
-                    required
                 />
 
                 <flux:input
                     wire:model="unit"
                     label="{{ __('consumables.consumable_unit') }}"
                     placeholder="e.g., pieces, liters, kg"
-                    required
                 />
             </div>
         </flux:card>

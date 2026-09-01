@@ -40,11 +40,11 @@ describe('Consumables', function () {
     test('a consumable can be created and user is automatically joined', function () {
         $user = User::factory()->create();
 
-        $this->actingAs($user)
-            ->post(route('consumables.create'), [
-                'name' => 'Milk',
-                'unit' => 'liters',
-            ])
+        Livewire::actingAs($user)
+            ->test('pages::consumables.create')
+            ->set('name', 'Milk')
+            ->set('unit', 'liters')
+            ->call('create')
             ->assertSessionHas('success', __('consumables.joined_successfully'))
             ->assertRedirect();
 
@@ -58,23 +58,23 @@ describe('Consumables', function () {
     test('a consumable name is required when creating', function () {
         $user = User::factory()->create();
 
-        $response = $this->post(route('consumables.create'), [
-            'name' => '',
-            'unit' => 'pieces',
-        ]);
 
-        $response->assertSessionHasErrors('name');
+        Livewire::actingAs($user)
+            ->test('pages::consumables.create')
+            ->set('unit', 'liters')
+            ->call('create')
+            ->assertHasErrors('name');
     });
 
     test('a consumable name cannot exceed 255 characters', function () {
         $user = User::factory()->create();
 
-        $response = $this->post(route('consumables.create'), [
-            'name' => str_repeat('a', 256),
-            'unit' => 'pieces',
-        ]);
-
-        $response->assertSessionHasErrors('name');
+        Livewire::actingAs($user)
+            ->test('pages::consumables.create')
+            ->set('name', str_repeat('a', 256))
+            ->set('unit', 'liters')
+            ->call('create')
+            ->assertHasErrors('name');
     });
 
     test('a consumable can be viewed by a joined user', function () {
