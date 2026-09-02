@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Consumable;
+use App\Http\Controllers\ConsumableController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -11,20 +11,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::livewire('/{consumable}', 'pages::consumables/show')->name('show');
 
-        Route::post('/{consumable}/join', function (Consumable $consumable) {
-            auth()->user()->consumables()->attach($consumable, ['total_quantity' => 0]);
+        Route::post('/{consumable}/join', [ConsumableController::class, 'join'])->name('join');
 
-            session()->flash('success', __('consumables.joined_successfully'));
-
-            return redirect()->route('consumables.show', $consumable);
-        })->name('join');
-
-        Route::delete('/{consumable}', function (Consumable $consumable) {
-            auth()->user()->consumables()->detach($consumable);
-
-            session()->flash('success', __('consumables.left_successfully'));
-
-            return redirect()->route('dashboard');
-        })->name('leave');
+        Route::delete('/{consumable}', [ConsumableController::class, 'leave'])->name('leave');
     });
 });

@@ -58,7 +58,6 @@ describe('Consumables', function () {
     test('a consumable name is required when creating', function () {
         $user = User::factory()->create();
 
-
         Livewire::actingAs($user)
             ->test('pages::consumables.create')
             ->set('unit', 'liters')
@@ -112,7 +111,24 @@ describe('Consumables', function () {
             'total_quantity' => 0,
         ]);
 
-        $this->assertSessionHas('success', __('consumables.joined_successfully'));
+        $response->assertSessionHas('success', __('consumables.joined_successfully'));
+    });
+
+    test('joining an already joined consumable does not reset the total', function () {
+        $user = User::factory()->create();
+        $consumable = Consumable::factory()->create();
+        $user->consumables()->attach($consumable, ['total_quantity' => 7]);
+
+        $response = $this->actingAs($user)
+            ->post(route('consumables.join', $consumable));
+
+        $response->assertRedirect(route('consumables.show', $consumable));
+
+        $this->assertDatabaseHas('consumable_user', [
+            'user_id' => $user->id,
+            'consumable_id' => $consumable->id,
+            'total_quantity' => 7,
+        ]);
     });
 
     test('a user can leave a consumable', function () {
@@ -130,7 +146,7 @@ describe('Consumables', function () {
             'consumable_id' => $consumable->id,
         ]);
 
-        $this->assertSessionHas('success', __('consumables.left_successfully'));
+        $response->assertSessionHas('success', __('consumables.left_successfully'));
     });
 
     test('the next person to bring is the one with the lowest total quantity', function () {

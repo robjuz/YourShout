@@ -14,25 +14,29 @@ class NextToBringNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public string $locale;
+
     public function __construct(
         public Consumable $consumable,
         public User $user,
-    ) {}
+    ) {
+        $this->locale = app()->getLocale();
+    }
 
     public function via(object $notifiable): array
     {
         $channels = ['mail'];
 
-//        if ($notifiable->pushSubscriptions()->count() > 0) {
-//            $channels[] = 'webpush';
-//        }
+        //        if ($notifiable->pushSubscriptions()->count() > 0) {
+        //            $channels[] = 'webpush';
+        //        }
 
         return $channels;
     }
 
     public function toWebPush($notifiable, $notification): WebPushMessage
     {
-        $locale = session('locale', app()->getLocale());
+        $locale = $this->locale;
 
         return (new WebPushMessage)
             ->title(__('notifications.next_to_bring_title', ['user' => $this->user->name], $locale))
@@ -47,7 +51,7 @@ class NextToBringNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $locale = session('locale', app()->getLocale());
+        $locale = $this->locale;
 
         return (new MailMessage)
             ->subject(__('notifications.next_to_bring_title', ['user' => $this->user->name], $locale))

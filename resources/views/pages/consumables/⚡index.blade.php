@@ -22,13 +22,6 @@ new class extends \Livewire\Component
     {
         return auth()->user()->consumables()->pluck('consumables.id')->toArray();
     }
-
-    public function leave(Consumable $consumable)
-    {
-        auth()->user()->consumables()->detach($consumable);
-
-        session()->flash('success', trans('consumables.left_successfully'));
-    }
 };
 ?>
 

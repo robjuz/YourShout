@@ -38,13 +38,6 @@ new class extends \Livewire\Component
             ->limit(20)
             ->get();
     }
-
-    public function join()
-    {
-        auth()->user()->consumables()->attach($consumable, ['total_quantity' => 0]);
-
-        session()->flash('success', __('consumables.joined_successfully'));
-    }
 };
 ?>
 
@@ -68,7 +61,8 @@ new class extends \Livewire\Component
                     <h3 class="font-semibold">{{ __('consumables.join') }}</h3>
                     <p class="text-sm text-gray-500">{{ __('consumables.participation') }}</p>
                 </div>
-                <form wire:submit="join">
+                <form method="POST" action="{{ route('consumables.join', $consumable) }}">
+                    @csrf
                     <flux:button type="submit" variant="primary">{{ __('consumables.join') }}</flux:button>
                 </form>
             </div>
