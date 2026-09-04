@@ -11,8 +11,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::livewire('/{consumable}', 'pages::consumables/show')->name('show');
 
-        Route::post('/{consumable}/join', [ConsumableController::class, 'join'])->name('join');
+//        Route::post('/{consumable}/join', [ConsumableController::class, 'join'])->name('join');
 
-        Route::delete('/{consumable}', [ConsumableController::class, 'leave'])->name('leave');
+//        Route::delete('/{consumable}', [ConsumableController::class, 'leave'])->name('leave');
     });
 });

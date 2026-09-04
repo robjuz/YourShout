@@ -12,6 +12,30 @@ new class extends Component {
     {
         return auth()->user()->consumables()->where('consumables.id', $this->consumable->id)->exists();
     }
+
+    public function join()
+    {
+        $user = auth()->user();
+
+        if ($user->consumables()->where('consumables.id', $this->consumable->id)->doesntExist()) {
+            $user->consumables()->attach($this->consumable, ['total_quantity' => 0]);
+        }
+
+        session()->flash('success', __('consumables.joined_successfully'));
+
+//        return redirect()->route('consumables.show', $consumable);
+    }
+
+    public function leave()
+    {
+        auth()->user()->consumables()->detach($this->consumable);
+
+        $this->dispatch('leave');
+
+//        session()->flash('success', __('consumables.left_successfully'));
+
+//        return redirect()->route('dashboard');
+    }
 };
 ?>
 
@@ -37,21 +61,15 @@ new class extends Component {
         </div>
     @endif
 
-    <div class="flex gap-2 pt-2">
-        @if ($this->hasJoined())
+    <div class="flex gap-2 pt-2 mt-auto">
+        @if ($this->hasJoined)
             <a href="{{ route('consumables.show', $consumable) }}" class="flex-1">
                 <flux:button variant="primary" class="w-full">{{ __('consumables.participation') }}</flux:button>
             </a>
-            <form method="POST" action="{{ route('consumables.leave', $consumable) }}">
-                @csrf
-                @method('DELETE')
-                <flux:button variant="outline">{{ __('consumables.leave') }}</flux:button>
-            </form>
+
+            <flux:button wire:click="leave" variant="outline">{{ __('consumables.leave') }}</flux:button>
         @else
-            <form method="POST" action="{{ route('consumables.join', $consumable) }}" class="w-full">
-                @csrf
-                <flux:button variant="primary" class="w-full">{{ __('consumables.join') }}</flux:button>
-            </form>
+            <flux:button wire:click="join" variant="primary" class="w-full">{{ __('consumables.join') }}</flux:button>
         @endif
     </div>
 </flux:card>

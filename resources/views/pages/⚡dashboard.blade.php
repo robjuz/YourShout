@@ -6,6 +6,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 new class extends \Livewire\Component {
+
     #[Computed]
     public function joinedConsumables()
     {
@@ -18,11 +19,6 @@ new class extends \Livewire\Component {
             ->orderByDesc('updated_at')
             ->get();
     }
-
-    public function totalPurchases()
-    {
-        return auth()->user()->totalPurchases();
-    }
 };
 ?>
 
@@ -34,7 +30,7 @@ new class extends \Livewire\Component {
 
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         @forelse($this->joinedConsumables as $consumable)
-            <livewire:consumables.consumable :$consumable/>
+            <livewire:consumables.consumable :$consumable @leave="$refresh"/>
         @empty
             <div class="col-span-full text-center py-12">
                 <p class="text-gray-500">{{ __('consumables.no_joined') }}</p>

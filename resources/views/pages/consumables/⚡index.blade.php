@@ -6,6 +6,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 new class extends \Livewire\Component {
+
     #[Computed]
     public function consumables(): Collection
     {
