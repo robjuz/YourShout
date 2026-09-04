@@ -30,7 +30,7 @@ new class extends \Livewire\Component {
             </a>
         </div>
     @else
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 justify-center">
+        <div class="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3 justify-center">
             @foreach ($this->consumables as $consumable)
                 <livewire:consumables.consumable :$consumable wire:key="{{ $consumable->id }}"/>
             @endforeach
