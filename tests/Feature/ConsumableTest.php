@@ -17,6 +17,8 @@ describe('Consumables', function () {
 
         $response->assertStatus(200);
         $response->assertSee($consumable->name);
+        $response->assertSee(__('consumables.new_consumable'));
+        $response->assertSee(route('consumables.create'), false);
     });
 
     test('index screen is empty when user has no consumables', function () {
@@ -26,6 +28,7 @@ describe('Consumables', function () {
 
         $response->assertOk();
         $response->assertSee(__('consumables.no_consumables'));
+        $response->assertSee(__('consumables.new_consumable'));
     });
 
     test('create screen displays correctly', function () {

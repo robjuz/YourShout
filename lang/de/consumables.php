@@ -15,6 +15,7 @@ return [
 
     // Consumables
     'consumables' => 'Verbrauchsgüter',
+    'new_consumable' => 'Neues Verbrauchsgut',
     'my_consumables' => 'Meine Verbrauchsgüter',
     'all_consumables' => 'Alle Verbrauchsgüter',
     'joined_summary' => 'Verbrauchsgüter, denen Sie beigetreten sind.',

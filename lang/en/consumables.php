@@ -15,6 +15,7 @@ return [
 
     // Consumables
     'consumables' => 'Consumables',
+    'new_consumable' => 'New consumable',
     'my_consumables' => 'My Consumables',
     'all_consumables' => 'All Consumables',
     'joined_summary' => 'Consumables you\'ve joined with your team.',
